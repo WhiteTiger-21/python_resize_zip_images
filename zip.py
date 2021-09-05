@@ -3,6 +3,7 @@ import sys
 import os
 import zipfile
 import io
+import glob
 
 Compress = False
 def img_convert(img_bin,img_name):
@@ -27,8 +28,13 @@ def img_convert(img_bin,img_name):
         img_resize.save(output,format="JPEG",quality=90)
         return  output.getvalue()
         return output
-        
-arg = sys.argv
+
+if os.name == "nt":
+    arg = ["zip.py"]
+    arg+=glob.glob(sys.argv[1])
+    print(arg)
+else :
+    arg = sys.argv
 if len(arg) == 1:
     print("No ZIP file exist")
     sys.exit()
