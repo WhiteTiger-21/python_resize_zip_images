@@ -12,22 +12,22 @@ def img_convert(img_bin,img_name):
     file_size = len(img_bin.getvalue())/1024**2
     width = img.size[0]
     height = img.size[1]
-    if height > 1920 and width > 1920 or file_size >= 2 * 1024 * 1024:
-        Compress = True
-        print("\tConverted")
-        MIN = min(width/1920,height/1920)
-        img_resize = img.resize((int(width/MIN),int(height/MIN)),Image.LANCZOS)
-        img_resize = img_resize.convert("RGB")
-        output = io.BytesIO()
-        img_resize.save(output,format="JPEG",quality=90)
-        return  output.getvalue()
+    if file_size >= 2:
+        if height > 1920 or width > 1920:
+            Compress = True
+            print("\tConverted")
+            MIN = min(width/1920,height/1920)
+            img_resize = img.resize((int(width/MIN),int(height/MIN)),Image.LANCZOS)
+            img_resize = img_resize.convert("RGB")
+            output = io.BytesIO()
+            img_resize.save(output,format="JPEG",quality=90)
+            return  output.getvalue()
+        else:
+            print("\tSkip")
+            return  img_bin.getvalue()
     else:
         print("\tSkip")
-        img_resize = img.convert("RGB")
-        output = io.BytesIO()
-        img_resize.save(output,format="JPEG",quality=90)
-        return  output.getvalue()
-        return output
+        return  img_bin.getvalue()
 
 if os.name == "nt":
     arg = ["zip.py"]
@@ -64,7 +64,7 @@ for i in arg[1:]:
         if Compress == True:
             with zipfile.ZipFile(i,"w", compression=zipfile.ZIP_LZMA) as zfo:
                 for binary,path in zip(img_jpg,img_path):
-                    print("\t"+path)
+                    print("\tWrite:"+path)
                     inf = zipfile.ZipInfo(path)
                     zfo.writestr(inf,binary)
             zfo.close()
