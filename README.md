@@ -2,7 +2,7 @@
 ## resizing zipped images  on python.
 ---
 ### Japanese/日本語
-#### ブログから飛んできた方は次の内容を読めば問題ないです。
+#### ブログから飛んできた方は次の内容を読めば問題ないです。ブログを読まなくても大丈夫です。
 実行方法
 ```bash:python run
 python zip.py 「任意のZIPファイル」
